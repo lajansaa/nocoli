@@ -1,23 +1,25 @@
+/* eslint-disable */
+
 import React from 'react';
 import {hot} from 'react-hot-loader';
 
-import Counter from './components/counter/counter';
-import Form from './components/form/form';
+import Search from './components/search/search';
+import styles from './style.scss';
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      message: 'hello'
-    };
-  }
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //   };
+  // }
 
   render() {
     return (
       <div>
-        <Form />
-        Welcome.
-        <Counter message={this.state.message} />
+        <h1>TVMaze React</h1>
+        <Search
+          placeholder="Enter a Movie Title"
+        />
       </div>
     );
   }
