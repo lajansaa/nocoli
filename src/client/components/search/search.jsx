@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './style.scss';
-import { results } from './results.js'
 
 class Search extends React.Component {
   constructor() {
@@ -18,10 +17,19 @@ class Search extends React.Component {
     this.setState({ searchTerm: event.target.value })
   }
 
-  searchMovie() {
-    const search = new RegExp(this.state.searchTerm, 'i');
-    const movieList = results.filter(movie => search.test(movie.show.name));
-    this.setState({ moviesList: movieList });
+  queryTVMazeAPI(query) {
+    const url = 'http://api.tvmaze.com/search/shows?q=' + query;
+    const result = fetch(url)
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((err) => console.error(err))
+    return result;
+  }
+
+ async searchMovie() {
+    const formattedSearchTerm = this.state.searchTerm.toLowerCase().replace(/\s/g, '+');
+    const moviesList = await this.queryTVMazeAPI(formattedSearchTerm);
+    this.setState({ moviesList: moviesList });
   }
 
   renderMoviesList() {
