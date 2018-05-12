@@ -1,0 +1,1 @@
+INSERT INTO cards (tags, notes, user_id) VALUES (ARRAY['react', 'fact'], 'react is developed by fb', 1);

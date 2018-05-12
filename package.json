@@ -72,20 +72,27 @@
   },
   "dependencies": {
     "airbnb-browser-shims": "^2.1.0",
+    "axios": "^0.18.0",
     "babel-polyfill": "6.26.0",
     "body-parser": "1.18.2",
     "compression": "1.7.2",
+    "dotenv": "^5.0.1",
+    "draft-js": "^0.10.5",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-fbjs": "^2.0.1",
     "express": "4.16.2",
     "immutable": "3.8.2",
+    "pg": "^7.4.3",
     "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-hot-loader": "4.0.0",
+    "react-mde": "^5.5.1",
     "react-router-dom": "^4.2.2",
+    "react-syntax-highlighter": "^7.0.4",
     "request": "2.83.0",
     "sanitize.css": "5.0.0",
+    "showdown": "^1.8.6",
     "winston": "^2.4.2"
   }
 }

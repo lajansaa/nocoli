@@ -1,0 +1,20 @@
+.cardContainer {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  border: 1px black dotted;
+  padding: 20px;
+}
+
+.inputField {
+  margin: 10px 0;
+  width: 90%;
+}
+
+.button {
+  margin: 10px 0;
+  width: 95%;
+}
+
+.controls {
+  text-align: right;
+}

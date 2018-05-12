@@ -1,5 +1,6 @@
-const pokemon = require('./controllers/pokemon');
+const users = require('./controllers/user');
 
 module.exports = (app) => {
-  app.get('/api/pokemon/:id', pokemon.get);
+  app.get('/users/notes', users.getCards),
+  app.post('/users/notes', users.saveCard)
 };

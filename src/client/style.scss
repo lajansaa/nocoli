@@ -1,13 +1,28 @@
-html, body {
-  background-color: white;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+body {
+  margin: 0;
+  background-color: #BCD0C7;
 }
-body{
-  padding:20px;
+
+.header {
+  height: 80px;
   text-align: center;
+  background-color: #008b8b;
+  box-shadow: 1px 2px 5px black;
+  position: sticky;
 }
 
-input {
-  margin: 10px 0;
+.logo {
+  font-family: 'Patrick Hand', cursive;
+  color: white;
+  margin: 0;
+  font-size: 3rem;
+  line-height: 80px;
 }
 
+.mainContainer {
+  width: 80%;
+  margin: 50px auto;
+  background-color: white;
+  padding: 20px 20px;
+  height: 1000px;
+}
