@@ -1,8 +1,6 @@
 const db = require('../db');
 
 const getCards = (request, response) => {
-  console.log("request params", request.params);
-  console.log("request body", request.body);
   db.userDB.getCards(request.params, (error, queryResults) => {
     if (error) {
       console.error(error);
@@ -13,12 +11,9 @@ const getCards = (request, response) => {
 }
 
 const saveCard = (request, response) => {
-  db.userDB.saveCard(request.params.id, (error, queryResults) => {
-    if (error) {
-      console.error(error);
-    } else {
-      response.send("ok");
-    }
+  console.log(request.body);
+  db.userDB.saveCard(request.body, (status) => {
+    response.send("ok");
   })
 }
 

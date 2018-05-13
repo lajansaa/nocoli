@@ -22,11 +22,25 @@ CREATE TABLE IF NOT EXISTS users (
 -- create cards table
 CREATE TABLE IF NOT EXISTS cards (
   id SERIAL PRIMARY KEY,
-  tags TEXT[],
   notes VARCHAR,
   user_id INT,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- create tags table
+CREATE TABLE IF NOT EXISTS tags (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- create cards_tags table
+CREATE TABLE IF NOT EXISTS cards_tags (
+  id SERIAL PRIMARY KEY,
+  card_id INT,
+  tag_id INT,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 

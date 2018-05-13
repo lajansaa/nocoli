@@ -2,10 +2,10 @@ const pg = require('pg');
 const user = require('./models/user');
 
 const configs = {
-  user: 'Isa',
-  host: '127.0.0.1',
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
   database: 'nocoli',
-  port: 5432
+  port: process.env.DB_PORT
 };
 
 const pool = new pg.Pool(configs);

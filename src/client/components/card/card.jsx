@@ -7,11 +7,11 @@ import axios from 'axios';
 // import Editor from './editor';
 
 class Card extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      tags: [],
-      notes: ""
+      tags: props.tags,
+      notes: props.notes
     }
     this.handleTagsChange = this.handleTagsChange.bind(this);
     this.handleNotesChange = this.handleNotesChange.bind(this);
@@ -22,22 +22,22 @@ class Card extends React.Component {
   }
 
   handleTagsChange(event) {
-    const tagsArr = event.target.value.split(',');
-    this.setState({ tags: tagsArr });
+    this.setState({ tags: event.target.value });
   }
 
   handleNotesChange(event) {
     this.setState({ notes: event.target.value });
   }
 
-  save() {
+  save(cardId) {
+    const tags = this.state.tags.length == 0 ? 'others' : this.state.tags;
     axios({
       method: 'post',
-      url: '/users/notes',
+      url: '/users/1/notes',
       data: {
         userId: 1,
-        cardId: 1,
-        tags: this.state.tags,
+        cardId: cardId,
+        tags: tags,
         notes: this.state.notes
       }
     })
@@ -51,11 +51,11 @@ class Card extends React.Component {
       <div>
         <form className={styles.cardContainer}>
           <div className={styles.inputs}>
-            <input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags" value={this.props.tags}/><br />
-            <textarea className={styles.inputField} onChange={this.handleNotesChange} type="text" name="notes" placeholder="notes" value={this.props.notes} /><br />
+            <input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><br />
+            <textarea className={styles.inputField} onChange={this.handleNotesChange} type="text" name="notes" placeholder="notes" value={this.state.notes} /><br />
           </div>
           <div className={styles.controls}>
-            <button className={styles.button} onClick={this.save}>Save</button><br />
+            <button className={styles.button} onClick={() => this.save(this.props.cardId)}>Save</button><br />
             <button className={styles.button} onClick={this.highlight}>Highlight</button><br />
             <button className={styles.button} onClick={this.review}>Review</button><br />
             <button className={styles.button} onClick={this.delete}>Delete</button><br />

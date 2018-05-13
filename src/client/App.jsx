@@ -18,14 +18,10 @@ class App extends React.Component {
   getNotes() {
     axios({
       method: 'get',
-      url: '/users/notes',
-      data: {
-        userId: 1,
-        date: '2018-05-12'
-      }
+      url: '/users/1/notes/2018-05-13'
     })
     .then(res => {
-      this.setState({ cards: [res.data] })
+      this.setState({ cards: res.data })
     });
   }
 
@@ -38,6 +34,7 @@ class App extends React.Component {
       return (
         <div key={index}>
           <Card
+            cardId={card.id}
             tags={card.tags}
             notes={card.notes}
           />
@@ -52,7 +49,9 @@ class App extends React.Component {
         </div>
         <div className={styles.mainContainer}>
           {renderNotes}
-          <Card />
+          <Card
+            cardId={null}
+            tags="others" />
         </div>
       </div>
     );
