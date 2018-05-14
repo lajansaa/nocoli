@@ -19,6 +19,7 @@ class App extends React.Component {
 
   changeEditorMode(currentCard) {
     if (this.state.prevCard != null) {
+      this.state.prevCard.save(this.state.prevCard.cardId);
       this.state.prevCard.setState({editorMode: false});
     }
     this.setState({ prevCard: currentCard })
@@ -34,25 +35,60 @@ class App extends React.Component {
     });
   }
 
+  formatDate(date) {
+    const currentDate = new Date(date);
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const monthNames = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    const month = monthNames[currentDate.getMonth()];
+    const year = currentDate.getFullYear()
+    return day + ' ' + month + ' ' + year;
+  }
+
   componentDidMount() {
     this.getNotes();
   }
 
   render() {
+    let currentDate = null;
     const renderCards = this.state.cards.map((card, index) => {
-      return (
-        <div key={index}>
-          <Card
-            changeEditorMode={this.changeEditorMode}
-            cardId={card.id}
-            tags={card.tags}
-            notes={card.notes}
-            editorMode={false}
-          />
-        </div>
-      )
+      const formattedDate = this.formatDate(card.created_at);
+      if (formattedDate != currentDate) {
+        currentDate = formattedDate;
+        return (
+          <div key={index}>
+            <h3 className={styles.date}>{formattedDate}</h3>
+            <Card
+              changeEditorMode={this.changeEditorMode}
+              cardId={card.id}
+              tags={card.tags}
+              notes={card.notes}
+              editorMode={false}
+            />
+          </div>
+        )
+      } else {
+        return (
+          <div key={index}>
+            <Card
+              changeEditorMode={this.changeEditorMode}
+              cardId={card.id}
+              tags={card.tags}
+              notes={card.notes}
+              editorMode={false}
+            />
+          </div>
+        )
+      }
     })
-
+    const todayDate = this.formatDate(Date.now());
+    let displayCurrentDate;
+    if (currentDate != todayDate) {
+      displayCurrentDate = (<h3 className={styles.date}>
+                              {todayDate}
+                            </h3>
+                           );
+    }  
+    
     return (
       <div>
         <div className={styles.header}>
@@ -60,6 +96,7 @@ class App extends React.Component {
         </div>
         <div className={styles.mainContainer}>
           {renderCards}
+          {displayCurrentDate}
           <Card
             changeEditorMode={this.changeEditorMode}
             cardId={null}

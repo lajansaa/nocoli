@@ -17,7 +17,6 @@ class Card extends React.Component {
     this.changeEditorMode = this.changeEditorMode.bind(this);
     this.handleTagsChange = this.handleTagsChange.bind(this);
     this.handleNotesChange = this.handleNotesChange.bind(this);
-    this.save = this.save.bind(this);
     // this.highlight = this.highlight.bind(this);
     // this.review = this.review.bind(this);
     // this.delete = this.delete.bind(this);
@@ -63,7 +62,6 @@ class Card extends React.Component {
               <textarea autoFocus className={styles.inputField} onChange={this.handleNotesChange} type="text" rows="8" name="notes" placeholder="notes" value={this.state.notes} /><br />
             </div>
             <div className={styles.controls}>
-              <button className={styles.button} onClick={() => this.save(this.props.cardId)}>Save</button><br />
               <button className={styles.button} onClick={this.highlight}>Highlight</button><br />
               <button className={styles.button} onClick={this.review}>Review</button><br />
               <button className={styles.button} onClick={this.delete}>Delete</button><br />
