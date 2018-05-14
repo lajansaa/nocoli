@@ -8,11 +8,20 @@ import styles from './style.scss';
 import axios from 'axios';
 
 class App extends React.Component {
-    constructor() {
+  constructor() {
     super();
     this.state = {
-      cards: []
+      cards: [],
+      prevCard: null
     }
+    this.changeEditorMode = this.changeEditorMode.bind(this);
+  }
+
+  changeEditorMode(currentCard) {
+    if (this.state.prevCard != null) {
+      this.state.prevCard.setState({editorMode: false});
+    }
+    this.setState({ prevCard: currentCard })
   }
 
   getNotes() {
@@ -30,13 +39,15 @@ class App extends React.Component {
   }
 
   render() {
-    const renderNotes = this.state.cards.map((card, index) => {
+    const renderCards = this.state.cards.map((card, index) => {
       return (
         <div key={index}>
           <Card
+            changeEditorMode={this.changeEditorMode}
             cardId={card.id}
             tags={card.tags}
             notes={card.notes}
+            editorMode={false}
           />
         </div>
       )
@@ -48,10 +59,14 @@ class App extends React.Component {
           <h1 className={styles.logo}>NOCOLI</h1>
         </div>
         <div className={styles.mainContainer}>
-          {renderNotes}
+          {renderCards}
           <Card
+            changeEditorMode={this.changeEditorMode}
             cardId={null}
-            tags="others" />
+            tags="others"
+            notes="Click here to start typing..."
+            editorMode={false}
+          />
         </div>
       </div>
     );

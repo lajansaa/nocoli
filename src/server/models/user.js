@@ -1,5 +1,5 @@
 module.exports = (dbPool) => {
-  const updateTags = (tags, cardId) => {
+  const updateTags = (tags, cardId, callback) => {
     const tagsArr = tags.split(',');
     tagsArr.forEach((tag) => {
       const getTagIdString = `WITH S AS (SELECT id
@@ -23,6 +23,8 @@ module.exports = (dbPool) => {
         dbPool.query(insertCardsTags, (err2, results2) => {
           if (err2) {
             console.error(err2);
+          } else {
+            callback("ok");
           }
         })
       })
@@ -65,8 +67,8 @@ module.exports = (dbPool) => {
         if (err) {
           console.error(err);
         } else {
-          updateTags(payload.tags, results.rows[0].id, () => {
-            callback("ok");
+          updateTags(payload.tags, results.rows[0].id, (status) => {
+            callback(status);
           })
         } 
       })
