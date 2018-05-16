@@ -2,6 +2,7 @@
 import React from 'react';
 import styles from './style.scss';
 import axios from 'axios';
+import TextArea from "react-textarea-autosize";
 // import SyntaxHighlighter from 'react-syntax-highlighter';
 // import { docco } from 'react-syntax-highlighter/styles/hljs';
 // import Editor from './editor';
@@ -21,7 +22,7 @@ class Card extends React.Component {
     this.handleNotesChange = this.handleNotesChange.bind(this);
     // this.highlight = this.highlight.bind(this);
     // this.review = this.review.bind(this);
-    this.delete = this.delete.bind(this);
+    // this.delete = this.delete.bind(this);
   }
 
   handleTagsChange(event) {
@@ -80,22 +81,37 @@ class Card extends React.Component {
       return (
         <div>
           <div className={styles.cardContainer}>
-            <div className={styles.inputs}>
+            <li></li>
+            <div>
+              <TextArea
+                autoFocus
+                className={styles.autoExpand} 
+                onChange={this.handleNotesChange}
+                rows="1"
+                name="notes"
+                placeholder={this.state.placeholder}
+                value={this.state.notes}
+              /><br />
+            </div>
+            <div>
               <input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><br />
-              <textarea autoFocus className={styles.inputField} onChange={this.handleNotesChange} type="text" rows="8" name="notes" placeholder={this.state.placeholder} value={this.state.notes} /><br />
             </div>
-            <div className={styles.controls}>
-              <button className={styles.button} onClick={this.highlight}>Highlight</button><br />
-              <button className={styles.button} onClick={this.review}>Review</button><br />
-              <button className={styles.button} onClick={() => this.delete(this.state.cardId)}>Delete</button><br />
-            </div>
+
           </div>
         </div>
       )
     } else {
       return (
         <div onClick={() => this.changeEditorMode(this.state.cardId)}>
-          <li>{this.state.notes}</li>
+          <div className={styles.cardContainer}>
+            <li></li>
+            <div>
+              <TextArea
+                className={styles.autoExpand} 
+                value={this.state.notes}
+              /><br />
+            </div>
+          </div>
         </div>
       )
     }

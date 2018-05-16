@@ -1,18 +1,28 @@
 .cardContainer {
   display: grid;
-  grid-template-columns: 4fr 1fr;
-  border: 1px black dotted;
-  padding: 20px;
+  grid-template-columns: 20px 4fr 1fr;
+  /*border: 1px black dotted;*/
+  /*padding: 20px;*/
 }
 
-.inputField {
-  margin: 10px 0;
-  width: 90%;
+*:focus {
+  outline: none;
 }
 
-.button {
-  margin: 10px 0;
+/*textarea {
+  border: none;
   width: 95%;
+  resize: none;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+}*/
+
+.autoExpand {
+  border: none;
+  width: 95%;
+  resize: none;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .controls {

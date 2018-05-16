@@ -28,4 +28,5 @@ yarn-debug.log*
 yarn-error.log*
 
 .env
-
+src/client/components/card/TextArea.jsx
+src/client/OutsideWrapper.jsx
