@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {hot} from 'react-hot-loader';
-import Card from './components/card/card';
+import Card from './components/card/Card';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import styles from './style.scss';
 import axios from 'axios';
@@ -13,21 +13,25 @@ class App extends React.Component {
     this.state = {
       cards: [],
       prevCard: null,
+      prevCardId: -1,
       selectedTags: 0,
       tags: []
     }
     this.changeEditorMode = this.changeEditorMode.bind(this);
     this.getCardsByTags = this.getCardsByTags.bind(this);
+    this.setTags = this.setTags.bind(this);
     this.nullPrevCard = this.nullPrevCard.bind(this);
     this.addCard = this.addCard.bind(this);
+    this.save = this.save.bind(this);
   }
 
-  changeEditorMode(currentCard) {
+  changeEditorMode(currentCard, cardId) {
     if (this.state.prevCard != null) {
-      this.state.prevCard.save(this.state.prevCard.state.cardId);
+      this.state.prevCard.save(this.state.prevCardId);
       this.state.prevCard.setState({ editorMode: false });
     }
-    this.setState({ prevCard: currentCard })
+    this.setState({ prevCard: currentCard,
+                    prevCardId: cardId })
   }
 
   nullPrevCard(deletedCard) {
@@ -46,18 +50,22 @@ class App extends React.Component {
     });
   }
 
-  getCardsByTags(event) {
+  setTags(event) {
     const tags = event.target.value;
-    if (tags == 0) {
+    this.getCardsByTags(tags);
+  }
+
+  getCardsByTags(selectedTags) {
+    if (selectedTags == 0) {
       this.setState({ selectedTags: 0 })
       this.getCardsByDate()
     } else {
       axios({
         method: 'get',
-        url: '/users/1/cards/tags/' + tags
+        url: '/users/1/cards/tags/' + selectedTags
       })
       .then(res2 => {
-        this.setState({ cards: res2.data, selectedTags: tags })
+        this.setState({ cards: res2.data, selectedTags: selectedTags })
       })
     }
   }
@@ -79,6 +87,28 @@ class App extends React.Component {
     const month = monthNames[currentDate.getMonth()];
     const year = currentDate.getFullYear()
     return day + ' ' + month + ' ' + year;
+  }
+
+  save(currentCard) {
+    const tags = currentCard.tags == undefined ? 'others' : currentCard.tags;
+    if (currentCard.notes != undefined) {
+      axios({
+        method: 'post',
+        url: '/users/1/cards',
+        data: {
+          userId: 1,
+          cardId: currentCard.cardId,
+          tags: tags,
+          notes: currentCard.notes
+        }
+      })
+      .then(res => {
+        this.getCardsByTags(this.state.selectedTags);
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
   }
 
   addCard() {
@@ -104,8 +134,6 @@ class App extends React.Component {
   }
 
   render() {
-    
-    let todayDate = this.formatDate(Date.now());
     let cards = this.state.cards;
     let cardsKeys = Object.keys(cards);
     
@@ -114,16 +142,20 @@ class App extends React.Component {
         <div key={index}>
           <h3 className={styles.date}>{key}</h3>
           {cards[key].map((card, index) =>
-            <Card
-              key={index}
-              changeEditorMode={this.changeEditorMode}
-              nullPrevCard={this.nullPrevCard}
-              index={index}
-              notes={card.notes}
-              tags={card.tags}
-              editorMode={false}
-              placeholder="Click here to start typing..."
-            />
+              <Card
+                key={index}
+                cardId={card.id}
+                changeEditorMode={this.changeEditorMode}
+                save={this.save}
+                nullPrevCard={this.nullPrevCard}
+                index={index}
+                notes={card.notes}
+                tags={card.tags}
+                editorMode={false}
+                placeholder="Click here to start typing..."
+              />
+            
+            
           )}
         </div>
       )
@@ -134,26 +166,29 @@ class App extends React.Component {
     })
 
     return (
-      <div>
-        <div className={styles.header}>
-          <h1 className={styles.logo}>NOCOLI</h1>
+        <div>
+          <div className={styles.header}>
+            
+              <h1 className={styles.logo}>NOCOLI</h1>
+            
+          </div>
+          <div className={styles.mainContainer}>
+            
+            <form>
+              <label>
+                Search Tags: 
+                <select value={this.state.selectedTags} onChange={this.setTags}>
+                  {renderTagOptions}
+                </select>
+              </label>
+            </form>
+            
+              {renderCards}
+            
+            <button className={styles.button} onClick={this.addCard}>Add Card</button><br />
+          </div>
         </div>
-        <div className={styles.mainContainer}>
-          
-          <form>
-            <label>
-              Search Tags: 
-              <select value={this.state.selectedTags} onChange={this.getCardsByTags}>
-                {renderTagOptions}
-              </select>
-            </label>
-          </form>
-
-          {renderCards}
-        
-          <button className={styles.button} onClick={this.addCard}>Add Card</button><br />
-        </div>
-      </div>
+      
     );
   }
 }

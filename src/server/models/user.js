@@ -23,6 +23,8 @@ module.exports = (dbPool) => {
         dbPool.query(insertCardsTags, (err2) => {
           if (err2) {
             console.error(err2);
+          } else {
+            callback()
           }
         })
       })
@@ -31,7 +33,6 @@ module.exports = (dbPool) => {
 
   return {
     getCardsByDate: (payload, callback) => {
-      console.log("model");
       const queryString = `SELECT
                                C.id,
                                C.user_id,
@@ -55,7 +56,6 @@ module.exports = (dbPool) => {
     },
 
     getCardsByTags: (payload, callback) => {
-      console.log(payload.tags);
       const queryString = `SELECT
                                C.id,
                                C.user_id,
@@ -70,7 +70,6 @@ module.exports = (dbPool) => {
                              AND T.id IN (${payload.tags})
                            GROUP BY 1,2,4,5,6
                            ORDER BY C.created_at;`
-      console.log(queryString);                          
       dbPool.query(queryString, (err, results) => {
         if (err) {
           console.error(err);
@@ -83,16 +82,16 @@ module.exports = (dbPool) => {
     saveCard: (payload, callback) => {
       let queryString;
       if (payload.cardId == null) {
-        queryString = `INSERT INTO cards (notes, user_id) VALUES ('${payload.notes}', ${payload.userId}) RETURNING id;`;
+        queryString = `INSERT INTO cards (notes, user_id) VALUES ($$${payload.notes}$$, ${payload.userId}) RETURNING id;`;
       } else {
-        queryString = `UPDATE cards SET notes='${payload.notes}' WHERE id = ${payload.cardId} RETURNING id;`;
+        queryString = `UPDATE cards SET notes=$$${payload.notes}$$ WHERE id = ${payload.cardId} RETURNING id;`;
       }
       dbPool.query(queryString, (err, results) => {
         if (err) {
           console.error(err);
         } else {
-          updateTags(payload.tags, results.rows[0].id, (status) => {
-            callback(status);
+          updateTags(payload.tags, results.rows[0].id, () => {
+            callback();
           })
         } 
       })

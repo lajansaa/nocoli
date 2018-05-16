@@ -70,13 +70,12 @@ const getCardsByTags = (request, response) => {
 }
 
 const saveCard = (request, response) => {
-  db.userDB.saveCard(request.body, (status) => {
+  db.userDB.saveCard(request.body, () => {
     response.send("ok");
   })
 }
 
 const deleteCard = (request, response) => {
-  console.log("came to delete controller", request.body)
   db.userDB.deleteCard(request.body, (error, queryResults) => {
     response.send("ok");
   })
