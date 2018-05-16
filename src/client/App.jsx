@@ -15,6 +15,7 @@ class App extends React.Component {
       prevCard: null,
       prevCardId: -1,
       selectedTags: 0,
+      tagName: '',
       tags: []
     }
     this.changeEditorMode = this.changeEditorMode.bind(this);
@@ -51,21 +52,28 @@ class App extends React.Component {
   }
 
   setTags(event) {
-    const tags = event.target.value;
-    this.getCardsByTags(tags);
+    console.log("came to set tags first")
+    this.setState({selectedTags: event.target.value,
+                   tagName: event.target.options[event.target.selectedIndex].text
+
+                  }, () => {
+                    this.getCardsByTags()})
+    // this.getCardsByTags(tags);
+    
   }
 
-  getCardsByTags(selectedTags) {
-    if (selectedTags == 0) {
-      this.setState({ selectedTags: 0 })
+  getCardsByTags() {
+    console.log("selectedTags:", this.state.selectedTags)
+    console.log("tagName:", this.state.tagName)
+    if (this.state.selectedTags == 0) {
       this.getCardsByDate()
     } else {
       axios({
         method: 'get',
-        url: '/users/1/cards/tags/' + selectedTags
+        url: '/users/1/cards/tags/' + this.state.selectedTags
       })
       .then(res2 => {
-        this.setState({ cards: res2.data, selectedTags: selectedTags })
+        this.setState({ cards: res2.data })
       })
     }
   }
@@ -103,7 +111,7 @@ class App extends React.Component {
         }
       })
       .then(res => {
-        this.getCardsByTags(this.state.selectedTags);
+        this.getCardsByTags();
       })
       .catch((error) => {
         console.log(error)
@@ -115,11 +123,21 @@ class App extends React.Component {
     this.changeEditorMode(null);
     const cardsObj = Object.assign({}, this.state.cards);
     const todayDate = this.formatDate(Date.now());
-    const emptyCard = {'id': null,
-                       'user_id': 1,
-                       'tags': 'others',
-                       'notes': undefined
-                      };
+    let emptyCard;
+    if (this.state.selectedTags != 0) {
+      emptyCard = {'id': null,
+                   'user_id': 1,
+                   'tags': this.state.tagName,
+                   'notes': undefined
+                  };
+    } else {
+      emptyCard = {'id': null,
+                   'user_id': 1,
+                   'tags': 'others',
+                   'notes': undefined
+                  };
+    }
+
     if (!(todayDate in cardsObj)) {
       cardsObj[todayDate] = [emptyCard]
     } else {
@@ -177,7 +195,7 @@ class App extends React.Component {
             <form>
               <label>
                 Search Tags: 
-                <select value={this.state.selectedTags} onChange={this.setTags}>
+                <select value={this.state.selectedTags} onChange={(event) => this.setTags(event)}>
                   {renderTagOptions}
                 </select>
               </label>

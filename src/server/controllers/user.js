@@ -56,7 +56,7 @@ const getCardsByTags = (request, response) => {
       })
       const emptyCard = {'id': null,
                           'user_id': 1,
-                          'tags': 'others',
+                          'tags': queryResults[0].tags,
                           'notes': undefined
                          };
       if (!(todayDate in obj)) {
