@@ -1,33 +1,35 @@
 module.exports = (dbPool) => {
   const updateTags = (tags, cardId, callback) => {
     const tagsArr = tags.split(',');
-    tagsArr.forEach((tag) => {
-      const getTagIdString = `WITH S AS (SELECT id
-                                         FROM tags
-                                         WHERE name = '${tag.trim()}'
-                                        ),
-                                  I AS (INSERT INTO tags (name)
-                                        SELECT '${tag.trim()}'
-                                        WHERE NOT EXISTS (SELECT 1 FROM S)
-                                        RETURNING id
-                                       )
-                              SELECT id
-                              FROM I
-                              UNION ALL
+    const deleteString = `DELETE FROM cards_tags WHERE card_id = ${cardId};`;
+    dbPool.query(deleteString, () => {
+      tagsArr.forEach((tag) => {
+        const getTagIdString = `WITH S AS (SELECT id
+                                           FROM tags
+                                           WHERE name = '${tag.trim()}'
+                                          ),
+                                    I AS (INSERT INTO tags (name)
+                                          SELECT '${tag.trim()}'
+                                          WHERE NOT EXISTS (SELECT 1 FROM S)
+                                          RETURNING id
+                                         )
+                                SELECT id
+                                FROM I
+                                UNION ALL
 
-                              SELECT id
-                              FROM S;`
-      dbPool.query(getTagIdString, (err, results) => {
-        const tagId = results.rows[0].id;
-        const insertCardsTags = `DELETE FROM cards_tags WHERE card_id = ${cardId}; INSERT INTO cards_tags (card_id, tag_id) VALUES (${cardId}, ${tagId});`
-        dbPool.query(insertCardsTags, (err2) => {
-          if (err2) {
-            console.error(err2);
-          } else {
-            callback()
-          }
+                                SELECT id
+                                FROM S;`
+        dbPool.query(getTagIdString, (err2, results) => {
+          const tagId = results.rows[0].id;
+          const insertCardsTags = `INSERT INTO cards_tags (card_id, tag_id) VALUES (${cardId}, ${tagId});`
+          dbPool.query(insertCardsTags, (err3) => {
+            if (err3) {
+              console.error(err3);
+            }
+          });
         })
       })
+      callback()
     })
   }
 
