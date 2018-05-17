@@ -6,6 +6,7 @@ import Card from './components/card/Card';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import styles from './style.scss';
 import axios from 'axios';
+import Remarkable from 'remarkable';
 
 class App extends React.Component {
   constructor() {
@@ -24,6 +25,7 @@ class App extends React.Component {
     this.nullPrevCard = this.nullPrevCard.bind(this);
     this.addCard = this.addCard.bind(this);
     this.save = this.save.bind(this);
+    this.formatNotes = this.formatNotes.bind(this);
   }
 
   changeEditorMode(currentCard, cardId) {
@@ -58,7 +60,6 @@ class App extends React.Component {
 
                   }, () => {
                     this.getCardsByTags()})
-    // this.getCardsByTags(tags);
     
   }
 
@@ -97,6 +98,12 @@ class App extends React.Component {
     return day + ' ' + month + ' ' + year;
   }
 
+  formatNotes(notes) {
+    const markdown = new Remarkable('full', { breaks: true});
+    let formattedNotes = markdown.render(notes);
+    return formattedNotes;
+  }
+
   save(currentCard) {
     const tags = currentCard.tags == undefined ? 'others' : currentCard.tags;
     if (currentCard.notes != undefined) {
@@ -112,6 +119,7 @@ class App extends React.Component {
       })
       .then(res => {
         this.getCardsByTags();
+        this.getTags();
       })
       .catch((error) => {
         console.log(error)
@@ -168,6 +176,7 @@ class App extends React.Component {
                 nullPrevCard={this.nullPrevCard}
                 index={index}
                 notes={card.notes}
+                formattedNotes={this.formatNotes(card.notes)}
                 tags={card.tags}
                 editorMode={false}
                 placeholder="Click here to start typing..."

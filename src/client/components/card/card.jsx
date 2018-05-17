@@ -3,9 +3,8 @@ import React from 'react';
 import styles from './style.scss';
 import axios from 'axios';
 import TextArea from "react-textarea-autosize";
-// import SyntaxHighlighter from 'react-syntax-highlighter';
-// import { docco } from 'react-syntax-highlighter/styles/hljs';
-// import Editor from './editor';
+import Remarkable from 'remarkable';
+import hljs from 'highlight.js';
 
 class Card extends React.Component {
   constructor(props) {
@@ -14,7 +13,8 @@ class Card extends React.Component {
       editorMode: false,
       tags: props.tags,
       notes: props.notes,
-      cardId: props.cardId
+      cardId: props.cardId,
+      formattedNotes: props.formattedNotes
     }
     this.changeEditorMode = this.changeEditorMode.bind(this);
     this.closeEditorMode = this.closeEditorMode.bind(this);
@@ -29,8 +29,16 @@ class Card extends React.Component {
     this.setState({ tags: event.target.value });
   }
 
+  formatNotes() {
+    const markdown = new Remarkable('full', { breaks: true});
+    let formattedNotes = markdown.render(this.state.notes);
+    this.setState({ formattedNotes: formattedNotes });
+  }
+
   handleNotesChange(event) {
-    this.setState({ notes: event.target.value });
+    this.setState({ notes: event.target.value }, () => {
+      this.formatNotes();
+    });
   }
 
   changeEditorMode(cardId) {
@@ -50,7 +58,8 @@ class Card extends React.Component {
     console.log("should derive state")
     this.setState({ cardId: nextProps.cardId,
                     tags: nextProps.tags,
-                    notes: nextProps.notes })
+                    notes: nextProps.notes,
+                    formattedNotes: nextProps.formattedNotes })
   }
 
   save() {
@@ -79,38 +88,33 @@ class Card extends React.Component {
   render() {
     if (this.state.editorMode == true) {
       return (
-        <div>
-          <div className={styles.cardContainer}>
-            <li></li>
+          <div className={styles.cardGrid}>
+            <div className={styles.spacer}></div>
             <div>
-              <TextArea
-                autoFocus
-                className={styles.autoExpand} 
-                onChange={this.handleNotesChange}
-                rows="1"
-                name="notes"
-                placeholder={this.state.placeholder}
-                value={this.state.notes}
-              /><br />
+              <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><br />
+              <div className={styles.codeGrid}>
+                <div className={styles.codeGridItem}>
+                  <TextArea
+                    autoFocus
+                    className={styles.autoExpand} 
+                    onChange={this.handleNotesChange}
+                    rows="1"
+                    name="notes"
+                    placeholder={this.state.placeholder}
+                    value={this.state.notes}
+                  />
+                </div>
+                <div dangerouslySetInnerHTML={{__html: this.state.formattedNotes}} className={styles.codeGridItem}/>
+              </div>
             </div>
-            <div>
-              <input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><br />
-            </div>
-
           </div>
-        </div>
       )
     } else {
       return (
         <div onClick={() => this.changeEditorMode(this.state.cardId)}>
-          <div className={styles.cardContainer}>
-            <li></li>
-            <div>
-              <TextArea
-                className={styles.autoExpand} 
-                value={this.state.notes}
-              /><br />
-            </div>
+          <div className={styles.cardGrid}>
+            <div className={styles.spacer}></div>
+            <div dangerouslySetInnerHTML={{__html: this.state.formattedNotes}} />
           </div>
         </div>
       )
