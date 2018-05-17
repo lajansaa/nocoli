@@ -96,6 +96,7 @@ class Card extends React.Component {
             <div className={styles.spacer}></div>
             <div>
               <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><button className={styles.deleteBtn} onClick={this.props.delete} >delete</button>
+              <p className={styles.markdownGuide}>**bold**, *italic*, ~~strikethrough~~, ==highlight==, `code`, ```blockcode```, [text](hyperlink)</p>
               <div className={styles.codeGrid}>
                 <div className={styles.codeGridItem}>
                   <TextArea

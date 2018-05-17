@@ -22,7 +22,6 @@ class App extends React.Component {
     this.changeEditorMode = this.changeEditorMode.bind(this);
     this.getCardsByTags = this.getCardsByTags.bind(this);
     this.setTags = this.setTags.bind(this);
-    this.nullPrevCard = this.nullPrevCard.bind(this);
     this.addCard = this.addCard.bind(this);
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
