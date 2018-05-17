@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import styles from './style.scss';
 import axios from 'axios';
 import Remarkable from 'remarkable';
+import hljs from 'highlight.js';
 
 class App extends React.Component {
   constructor() {
@@ -99,7 +100,24 @@ class App extends React.Component {
   }
 
   formatNotes(notes) {
-    const markdown = new Remarkable('full', { breaks: true});
+    const highlight = (str, lang) => {
+                         if (lang && hljs.getLanguage(lang)) {
+                           try {
+                             return hljs.highlight(lang, str).value;
+                           } catch (err) {}
+                         }
+
+                         try {
+                           return hljs.highlightAuto(str).value;
+                         } catch (err) {}
+
+                         return '';
+                      }
+                                   
+    const markdown = new Remarkable('full', { breaks: true,
+                                              highlight: highlight
+                                            }
+                                    )
     let formattedNotes = markdown.render(notes);
     return formattedNotes;
   }
@@ -176,7 +194,7 @@ class App extends React.Component {
                 nullPrevCard={this.nullPrevCard}
                 index={index}
                 notes={card.notes}
-                formattedNotes={this.formatNotes(card.notes)}
+                formattedNotes={this.formatNotes(card.notes||"Click to add notes...")}
                 tags={card.tags}
                 editorMode={false}
                 placeholder="Click here to start typing..."
@@ -212,7 +230,7 @@ class App extends React.Component {
             
               {renderCards}
             
-            <button className={styles.button} onClick={this.addCard}>Add Card</button><br />
+            <button onClick={this.addCard}>Add Notes</button><br />
           </div>
         </div>
       

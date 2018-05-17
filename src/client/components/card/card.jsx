@@ -30,7 +30,24 @@ class Card extends React.Component {
   }
 
   formatNotes() {
-    const markdown = new Remarkable('full', { breaks: true});
+    const highlight = (str, lang) => {
+                         if (lang && hljs.getLanguage(lang)) {
+                           try {
+                             return hljs.highlight(lang, str).value;
+                           } catch (err) {}
+                         }
+
+                         try {
+                           return hljs.highlightAuto(str).value;
+                         } catch (err) {}
+
+                         return '';
+                      }
+
+    const markdown = new Remarkable('full', { breaks: true,
+                                              highlight: highlight
+                                            }
+                                    );
     let formattedNotes = markdown.render(this.state.notes);
     this.setState({ formattedNotes: formattedNotes });
   }

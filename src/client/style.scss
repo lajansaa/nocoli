@@ -1,13 +1,14 @@
 body {
   margin: 0;
-  background-color: #BCD0C7;
+  background-color: #264653;
   font-family: 'Roboto', sans-serif;
+  overflow: hidden;
 }
 
 .header {
   height: 80px;
   text-align: center;
-  background-color: #008b8b;
+  background-color: #E98A15;
   box-shadow: 1px 2px 5px black;
   position: sticky;
   top: 0;
@@ -22,11 +23,12 @@ body {
 }
 
 .mainContainer {
-  width: 80%;
-  margin: 50px auto;
+  width: 85%;
+  margin: 30px auto;
   background-color: white;
   padding: 20px 20px;
-  height: 1000px;
+  height: 80vh;
+  overflow: scroll;
 }
 
 .date {

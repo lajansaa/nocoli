@@ -18,16 +18,11 @@
 .spacer {
   width: 8px;
   content: '';
-  background-color: lightgrey;
-  opacity: 0.4;
+  background-color: #FFBF69;
 }
 
 *:focus {
   outline: none;
-}
-
-.tagLabel {
-  font-size: 0.8rem;
 }
 
 .autoExpand {
@@ -40,4 +35,19 @@
 
 .controls {
   text-align: right;
+}
+
+button {
+  color: #FFC107;
+  border: 1px solid #FFC107;
+  border-radius: .25rem;
+  padding: 5px 10px;
+}
+
+button:hover {
+  color: #264653;
+  border: 1px solid #FFC107;
+  border-radius: .25rem;
+  padding: 5px 10px;
+  background-color: #FFC107;
 }
