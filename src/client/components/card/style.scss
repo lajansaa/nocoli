@@ -33,21 +33,15 @@
   width: 100%;
 }
 
-.controls {
-  text-align: right;
-}
-
-button {
-  color: #FFC107;
-  border: 1px solid #FFC107;
+.deleteBtn {
+  color: #FF6B6B;
+  border: 1px solid #FF6B6B;
   border-radius: .25rem;
-  padding: 5px 10px;
+  padding: 1px 10px;
+  margin-left: 10px;
 }
 
-button:hover {
+.deleteBtn:hover {
   color: #264653;
-  border: 1px solid #FFC107;
-  border-radius: .25rem;
-  padding: 5px 10px;
-  background-color: #FFC107;
+  background-color: #FF6B6B;
 }

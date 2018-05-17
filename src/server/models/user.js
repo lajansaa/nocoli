@@ -101,11 +101,11 @@ module.exports = (dbPool) => {
 
     deleteCard: (payload, callback) => {
       let queryString = `DELETE FROM cards WHERE id = ${payload.cardId}; DELETE FROM cards_tags WHERE card_id = ${payload.cardId};`
-      dbPool.query(queryString, (err, results) => {
+      dbPool.query(queryString, (err) => {
         if (err) {
           console.error(err);
         } else {
-          callback(err, results);
+          callback();
         } 
       })
     },

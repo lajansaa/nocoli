@@ -89,26 +89,13 @@ class Card extends React.Component {
     
   }
 
-  delete(cardId) {
-    axios({
-      method: 'delete',
-      url: '/users/1/cards',
-      data: {
-        cardId: cardId
-      }
-    })
-    .then(res => {
-      this.state.nullPrevCard(this);
-    });
-  }
-
   render() {
     if (this.state.editorMode == true) {
       return (
           <div className={styles.cardGrid}>
             <div className={styles.spacer}></div>
             <div>
-              <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><br />
+              <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><button className={styles.deleteBtn} onClick={this.props.delete} >delete</button>
               <div className={styles.codeGrid}>
                 <div className={styles.codeGridItem}>
                   <TextArea

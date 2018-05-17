@@ -76,7 +76,7 @@ const saveCard = (request, response) => {
 }
 
 const deleteCard = (request, response) => {
-  db.userDB.deleteCard(request.body, (error, queryResults) => {
+  db.userDB.deleteCard(request.body, () => {
     response.send("ok");
   })
 }

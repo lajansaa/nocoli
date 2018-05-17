@@ -3,7 +3,6 @@
 import React from 'react';
 import {hot} from 'react-hot-loader';
 import Card from './components/card/Card';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import styles from './style.scss';
 import axios from 'axios';
 import Remarkable from 'remarkable';
@@ -26,6 +25,7 @@ class App extends React.Component {
     this.nullPrevCard = this.nullPrevCard.bind(this);
     this.addCard = this.addCard.bind(this);
     this.save = this.save.bind(this);
+    this.delete = this.delete.bind(this);
     this.formatNotes = this.formatNotes.bind(this);
   }
 
@@ -145,6 +145,23 @@ class App extends React.Component {
     }
   }
 
+  delete(cardId) {
+    if (cardId != undefined) {
+      axios({
+        method: 'delete',
+        url: '/users/1/cards',
+        data: {
+          cardId: cardId
+        }
+      })
+      .then(res => {
+        this.state.prevCard.setState({ editorMode: false });
+        this.setState({ prevCard: null,
+                        prevCardId: -1 }, () => { this.getCardsByTags(); })
+      });
+    }
+  }
+
   addCard() {
     this.changeEditorMode(null);
     const cardsObj = Object.assign({}, this.state.cards);
@@ -191,7 +208,7 @@ class App extends React.Component {
                 cardId={card.id}
                 changeEditorMode={this.changeEditorMode}
                 save={this.save}
-                nullPrevCard={this.nullPrevCard}
+                delete={() => this.delete(card.id)}
                 index={index}
                 notes={card.notes}
                 formattedNotes={this.formatNotes(card.notes||"Click to add notes...")}
@@ -230,7 +247,7 @@ class App extends React.Component {
             
               {renderCards}
             
-            <button onClick={this.addCard}>Add Notes</button><br />
+            <button className={styles.addCardBtn} onClick={this.addCard}>Add Notes</button><br />
           </div>
         </div>
       

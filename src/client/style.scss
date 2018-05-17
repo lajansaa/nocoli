@@ -34,3 +34,15 @@ body {
 .date {
   text-align: center;
 }
+
+.addCardBtn {
+  color: #FFC107;
+  border: 1px solid #FFC107;
+  border-radius: .25rem;
+  padding: 5px 10px;
+}
+
+.addCardBtn:hover {
+  color: #264653;
+  background-color: #FFC107;
+}
