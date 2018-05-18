@@ -5,6 +5,7 @@ import axios from 'axios';
 import TextArea from "react-textarea-autosize";
 import Remarkable from 'remarkable';
 import hljs from 'highlight.js';
+import Tooltip from 'material-ui-next/Tooltip';
 
 class Card extends React.Component {
   constructor(props) {
@@ -97,6 +98,9 @@ class Card extends React.Component {
             <div>
               <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><button className={styles.deleteBtn} onClick={this.props.delete} >delete</button>
               <p className={styles.markdownGuide}>**bold**, *italic*, ~~strikethrough~~, ==highlight==, `code`, ```blockcode```, [text](hyperlink)</p>
+              <Tooltip id="tooltip-right-start" title="click for markdown guide" placement="right-start">
+                <a href="https://jonschlinkert.github.io/remarkable/demo/" target="_blank"><button className={styles.markdownBtn}>?</button></a>
+              </Tooltip>
               <div className={styles.codeGrid}>
                 <div className={styles.codeGridItem}>
                   <TextArea

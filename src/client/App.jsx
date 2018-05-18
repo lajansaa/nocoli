@@ -37,12 +37,6 @@ class App extends React.Component {
                     prevCardId: cardId })
   }
 
-  nullPrevCard(deletedCard) {
-    const newCards = this.state.cards;
-    newCards.splice(deletedCard.state.index, 1);
-    this.setState({ cards: newCards });
-  }
-
   getCardsByDate() {
     axios({
       method: 'get',
@@ -54,7 +48,6 @@ class App extends React.Component {
   }
 
   setTags(event) {
-    console.log("came to set tags first")
     this.setState({selectedTags: event.target.value,
                    tagName: event.target.options[event.target.selectedIndex].text
 
@@ -64,8 +57,6 @@ class App extends React.Component {
   }
 
   getCardsByTags() {
-    console.log("selectedTags:", this.state.selectedTags)
-    console.log("tagName:", this.state.tagName)
     if (this.state.selectedTags == 0) {
       this.getCardsByDate()
     } else {
@@ -229,9 +220,8 @@ class App extends React.Component {
     return (
         <div>
           <div className={styles.header}>
-            
-              <h1 className={styles.logo}>NOCOLI</h1>
-            
+            <h1 className={styles.logo}>NOCOLI</h1>
+            <p className={styles.tagline}>Note·Code·Link</p>
           </div>
           <div className={styles.mainContainer}>
             
