@@ -65,11 +65,7 @@ class Card extends React.Component {
   }
 
   closeEditorMode(cardId) {
-    if (cardId == undefined) {
-      this.save(null);
-    } else {
-      this.state.changeEditorMode(null);
-    }
+    this.props.changeEditorMode(null, -1);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,6 +98,7 @@ class Card extends React.Component {
                 </div>
                 <div className={styles.rightControls}>
                   <button className={styles.deleteBtn} onClick={this.props.delete} >delete</button>
+                  <button className={styles.closeBtn} onClick={() => this.closeEditorMode(this.state.cardId)} >close</button>
                 </div>
               </div>
               <p className={styles.markdownGuide}>**bold**, *italic*, ~~strikethrough~~, ==highlight==, `code`, ```blockcode```, [text](hyperlink)</p>

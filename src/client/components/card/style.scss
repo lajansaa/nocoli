@@ -48,7 +48,7 @@
 
 .controls {
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .rightControls {
@@ -71,4 +71,17 @@
   background-color: #264653;
   color: white;
   border-color: white;
+}
+
+.closeBtn {
+  color: black;
+  border: 1px solid black;
+  border-radius: .25rem;
+  padding: 1px 10px;
+  margin-left: 10px;
+}
+
+.closeBtn:hover {
+  color: white;
+  background-color: black;
 }

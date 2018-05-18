@@ -199,6 +199,7 @@ class App extends React.Component {
                 changeEditorMode={this.changeEditorMode}
                 save={this.save}
                 delete={() => this.delete(card.id)}
+                close={this.close}
                 index={index}
                 notes={card.notes}
                 formattedNotes={this.formatNotes(card.notes||"Click to add notes...")}
