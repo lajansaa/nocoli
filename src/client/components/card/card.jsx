@@ -96,7 +96,14 @@ class Card extends React.Component {
           <div className={styles.cardGrid}>
             <div className={styles.spacer}></div>
             <div>
-              <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="tags (defaulted to others)" value={this.state.tags} /><button className={styles.deleteBtn} onClick={this.props.delete} >delete</button>
+              <div className={styles.controls}>
+                <div className={styles.leftControls}>
+                  <span className={styles.tagLabel}>Tags: </span><input className={styles.inputField} onChange={this.handleTagsChange} type="text" name="tags" placeholder="default: others" value={this.state.tags} />
+                </div>
+                <div className={styles.rightControls}>
+                  <button className={styles.deleteBtn} onClick={this.props.delete} >delete</button>
+                </div>
+              </div>
               <p className={styles.markdownGuide}>**bold**, *italic*, ~~strikethrough~~, ==highlight==, `code`, ```blockcode```, [text](hyperlink)</p>
               <Tooltip id="tooltip-right-start" title="click for markdown guide" placement="right-start">
                 <a href="https://jonschlinkert.github.io/remarkable/demo/" target="_blank"><button className={styles.markdownBtn}>?</button></a>

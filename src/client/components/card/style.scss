@@ -28,7 +28,7 @@
 .autoExpand {
   border: none;
   resize: none;
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Roboto', sans-serif;
   width: 100%;
 }
@@ -44,6 +44,15 @@
 .deleteBtn:hover {
   color: #264653;
   background-color: #FF6B6B;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+
+.rightControls {
+  text-align: right;
 }
 
 .markdownGuide {
