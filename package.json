@@ -16,7 +16,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/server",
-    "start": "node build/server",
+    "start": "node build/server/index.js",
+    "heroku-prebuid": "rimraf build",
+    "heroku-postbuild": "npm run build",
     "prebuild": "rimraf build",
     "build": "npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack -p --progress --config=config/webpack.config.prod.js",
