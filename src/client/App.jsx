@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {hot} from 'react-hot-loader';
-import Card from './components/card/Card';
+import Card from './components/Card/Card';
 import styles from './style.scss';
 import axios from 'axios';
 import Remarkable from 'remarkable';
