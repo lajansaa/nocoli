@@ -17,7 +17,6 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/server",
     "start": "node build/server/index.js",
-    "heroku-prebuild": "rimraf build",
     "heroku-postbuild": "npm run build",
     "prebuild": "rimraf build",
     "build": "npm run build:client && npm run build:server",
