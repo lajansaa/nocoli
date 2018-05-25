@@ -1,12 +1,20 @@
 const pg = require('pg');
 const user = require('./models/user');
+let configs;
 
-const configs = {
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  port: process.env.DB_PORT
-};
+if (process.env.NODE_ENV == 'development') {
+  configs = {
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: 'nocoli',
+    port: process.env.DB_PORT
+  };
+} else {
+  configs = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+  };
+}
 
 const pool = new pg.Pool(configs);
 
