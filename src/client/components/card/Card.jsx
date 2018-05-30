@@ -11,7 +11,7 @@ class Card extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorMode: false,
+      editorMode: props.editorMode,
       tags: props.tags,
       notes: props.notes,
       cardId: props.cardId,
@@ -55,21 +55,37 @@ class Card extends React.Component {
 
   handleNotesChange(event) {
     this.setState({ notes: event.target.value }, () => {
+      const obj = { cardId: this.state.cardId,
+                  tags: this.state.tags,
+                  notes: this.state.notes
+                }
+      this.props.setPrev(obj);
       this.formatNotes();
     });
   }
 
-  changeEditorMode(cardId) {
-    this.props.changeEditorMode(this, cardId);
-    this.setState({ editorMode: true });
+  changeEditorMode() {
+    // this.props.changeEditorMode(this, cardId);
+    const obj = { cardId: this.state.cardId,
+                  tags: this.state.tags,
+                  notes: this.state.notes
+                }
+    console.log('card obj', obj);
+    this.props.changeEditorMode(obj);
+    // this.setState({ editorMode: true });
   }
 
   closeEditorMode(cardId) {
-    this.props.changeEditorMode(null, -1);
+    const obj = { cardId: -1,
+                  tags: null,
+                  notes: null
+                }
+    this.props.changeEditorMode(obj);
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ cardId: nextProps.cardId,
+                    editorMode: nextProps.editorMode,
                     tags: nextProps.tags,
                     notes: nextProps.notes,
                     formattedNotes: nextProps.formattedNotes })
@@ -123,7 +139,7 @@ class Card extends React.Component {
       )
     } else {
       return (
-        <div onClick={() => this.changeEditorMode(this.state.cardId)}>
+        <div onClick={() => this.changeEditorMode()}>
           <div className={styles.cardGrid}>
             <div className={styles.spacer}></div>
             <div dangerouslySetInnerHTML={{__html: this.state.formattedNotes}} />

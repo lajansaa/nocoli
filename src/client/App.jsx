@@ -13,12 +13,15 @@ class App extends React.Component {
     super();
     this.state = {
       cards: [],
-      prevCard: null,
+      activeCardId: -1,
       prevCardId: -1,
+      prevCardNotes: null,
+      prevCardTags: null,
       selectedTags: 0,
       tagName: '',
       tags: []
     }
+    this.setPrev = this.setPrev.bind(this);
     this.changeEditorMode = this.changeEditorMode.bind(this);
     this.getCardsByTags = this.getCardsByTags.bind(this);
     this.setTags = this.setTags.bind(this);
@@ -28,13 +31,29 @@ class App extends React.Component {
     this.formatNotes = this.formatNotes.bind(this);
   }
 
-  changeEditorMode(currentCard, cardId) {
-    if (this.state.prevCard != null) {
-      this.state.prevCard.save(this.state.prevCardId);
-      this.state.prevCard.setState({ editorMode: false });
+  // changeEditorMode(currentCard, cardId) {
+  //   if (this.state.prevCard != null) {
+  //     this.state.prevCard.save(this.state.prevCardId);
+  //     this.state.prevCard.setState({ editorMode: false });
+  //   }
+  //   this.setState({ prevCard: currentCard,
+  //                   prevCardId: cardId })
+  // }
+
+  setPrev(currentCard) {
+    
+    this.setState({ activeCardId: currentCard.cardId,
+                    prevCardId: currentCard.cardId,
+                    prevCardNotes: currentCard.notes,
+                    prevCardTags: currentCard.tags }, () => {console.log(this.state.prevCardNotes)})
+  }
+
+  changeEditorMode(currentCard) {
+    if (this.state.prevCardId != -1) {
+      console.log("saving previous card");
+      this.save();
     }
-    this.setState({ prevCard: currentCard,
-                    prevCardId: cardId })
+    this.setPrev(currentCard);
   }
 
   getCardsByDate() {
@@ -112,17 +131,17 @@ class App extends React.Component {
     return formattedNotes;
   }
 
-  save(currentCard) {
-    const tags = currentCard.tags == undefined ? 'others' : currentCard.tags;
-    if (currentCard.notes != undefined) {
+  save() {
+    const tags = this.state.prevCardTags == undefined ? 'others' : this.state.prevCardTags;
+    if (this.state.prevCardNotes != undefined) {
       axios({
         method: 'post',
         url: '/users/1/cards',
         data: {
           userId: 1,
-          cardId: currentCard.cardId,
+          cardId: this.state.prevCardId,
           tags: tags,
-          notes: currentCard.notes
+          notes: this.state.prevCardNotes
         }
       })
       .then(res => {
@@ -187,15 +206,17 @@ class App extends React.Component {
   render() {
     let cards = this.state.cards;
     let cardsKeys = Object.keys(cards);
-    
+    console.log("re-render activeCardId", this.state.activeCardId)
     const renderCards = cardsKeys.map((key, index) => {
       return (
         <div key={index}>
           <h3 className={styles.date}>{key}</h3>
           {cards[key].map((card, index) =>
+              <div key={index}>
               <Card
                 key={index}
                 cardId={card.id}
+                setPrev={this.setPrev}
                 changeEditorMode={this.changeEditorMode}
                 save={this.save}
                 delete={() => this.delete(card.id)}
@@ -204,9 +225,10 @@ class App extends React.Component {
                 notes={card.notes}
                 formattedNotes={this.formatNotes(card.notes||"Click to add notes...")}
                 tags={card.tags}
-                editorMode={false}
+                editorMode={card.id === this.state.activeCardId}
                 placeholder="Click here to start typing..."
               />
+            </div>
             
             
           )}
