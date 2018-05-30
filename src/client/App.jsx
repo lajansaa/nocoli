@@ -40,7 +40,7 @@ class App extends React.Component {
   getCardsByDate() {
     axios({
       method: 'get',
-      url: '/users/1/cards/date/2018-05-13'
+      url: '/users/1/cards/date'
     })
     .then(res => {
       this.setState({ cards: res.data })

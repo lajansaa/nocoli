@@ -69,7 +69,6 @@ class Card extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("should derive state")
     this.setState({ cardId: nextProps.cardId,
                     tags: nextProps.tags,
                     notes: nextProps.notes,
